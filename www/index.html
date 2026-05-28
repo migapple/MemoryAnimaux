@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Memory Animaux</title>
+<title>Memo Animaux Kids</title>
 <style>
   :root {
     --ink: #1a0a2e;
@@ -177,65 +177,6 @@
   }
   .btn-play-again:active{transform:scale(0.96);}
 
-  /* SETTINGS PANEL */
-  .panel{
-    position:fixed;inset:0;z-index:200;
-    background:rgba(13,8,32,0.97);
-    display:flex;flex-direction:column;
-    padding-top:calc(14px + env(safe-area-inset-top));
-    padding-bottom:calc(14px + env(safe-area-inset-bottom));
-    overflow-y:auto;
-  }
-  .panel-header{
-    display:flex;align-items:center;justify-content:space-between;
-    padding:0 14px 16px;
-    border-bottom:1px solid rgba(232,184,75,0.2);
-    flex-shrink:0;
-  }
-  .panel-title{font-size:calc(18px * var(--fs));font-weight:800;color:var(--gold);}
-  .panel-close{
-    width:36px;height:36px;border-radius:50%;
-    background:rgba(232,184,75,0.12);border:1px solid rgba(232,184,75,0.3);
-    color:var(--gold);font-size:18px;cursor:pointer;
-    display:flex;align-items:center;justify-content:center;
-  }
-  .panel-body{padding:14px;flex:1;}
-  .panel-section-title{
-    font-size:calc(11px * var(--fs));color:rgba(232,184,75,0.5);
-    text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;
-  }
-
-  /* APPS GRID */
-  .apps-grid{
-    display:grid;grid-template-columns:repeat(4,1fr);gap:10px 6px;
-    margin-bottom:20px;
-  }
-  .app-item{display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;}
-  .app-icon{
-    width:56px;height:56px;border-radius:13px;
-    background:rgba(232,184,75,0.08);
-    border:1px solid rgba(232,184,75,0.15);
-    display:flex;align-items:center;justify-content:center;
-    overflow:hidden;
-  }
-  .app-icon img{width:100%;height:100%;border-radius:13px;object-fit:cover;}
-  .app-icon-placeholder{font-size:24px;}
-  .app-name{
-    font-size:calc(9px * var(--fs));color:rgba(232,184,75,0.7);
-    text-align:center;line-height:1.2;max-width:64px;
-  }
-
-  .badge-store{
-    display:block;margin:0 auto 14px;height:36px;
-    opacity:0.85;
-  }
-
-  .btn-icon.muted{
-    background:rgba(255,255,255,0.05);
-    border-color:rgba(255,255,255,0.15);
-    color:rgba(255,255,255,0.3);
-  }
-
   /* CONFETTI CANVAS */
   #confettiCanvas{
     position:fixed;inset:0;z-index:99;
@@ -254,14 +195,13 @@
   <div class="header">
     <div class="header-left">
       <div>
-        <div class="app-title">🐾 Memory Animaux</div>
+        <div class="app-title">🐾 Memo Animaux Kids</div>
         <div class="app-subtitle" id="sub">Retrouve les paires !</div>
       </div>
     </div>
     <div class="header-right">
       <button class="btn-icon" id="btnSound" onclick="toggleSound()" title="Son">🔊</button>
       <button class="btn-icon" id="btnLang" onclick="toggleLang()">🇬🇧</button>
-      <button class="btn-icon" onclick="showPanel()" style="font-size:20px;">📱</button>
     </div>
   </div>
 
@@ -315,22 +255,6 @@
   <button class="btn-play-again" id="win-btn" onclick="newGame();hideWin();">🔄 Rejouer</button>
 </div>
 
-<!-- SETTINGS PANEL -->
-<div class="panel hidden" id="panel">
-  <div class="panel-header">
-    <div class="panel-title">📱 Mes Apps Kids</div>
-    <button class="panel-close" onclick="hidePanel()">✕</button>
-  </div>
-  <div class="panel-body">
-    <div class="panel-section-title" id="lbl-discover">Découvrir</div>
-    <div class="apps-grid" id="appsGrid"></div>
-    <img
-      src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/fr-fr"
-      class="badge-store" alt="App Store"
-      onclick="window.open('https://apps.apple.com/developer/id368771203','_system')"
-    >
-  </div>
-</div>
 
 <script>
 // ── DONNÉES ──────────────────────────────────────────────────────────────
@@ -445,13 +369,6 @@ function stopConfetti(){
   const ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
-const KIDS_APPS = [
-  { id:'6773037110', name:'Dinosaures Kids' },
-  { id:'6772937635', name:'Animaux Kids' },
-  { id:'6772548541', name:'Lettres Kids' },
-  { id:'6772546976', name:'Chiffres Kids' },
-  { id:'6772468506', name:'Mahjong Kids' },
-];
 
 // ── STATE ─────────────────────────────────────────────────────────────────
 let lang = 'fr';
@@ -501,7 +418,6 @@ function applyLang(){
   document.getElementById('win-tries-lbl').textContent = t('winTries');
   document.getElementById('win-score-lbl').textContent = t('winScore');
   document.getElementById('win-btn').textContent = t('replay');
-  document.getElementById('lbl-discover').textContent = t('discover');
   document.getElementById('btnLang').textContent = lang === 'fr' ? '🇬🇧' : '🇫🇷';
   // refresh card names
   document.querySelectorAll('.card-name').forEach(el => {
@@ -660,50 +576,6 @@ function clearScores(){
   bestScore = {};
   try { localStorage.removeItem('memory_best'); } catch(e) {}
   updateScorebar();
-}
-function showPanel(){
-  document.getElementById('panel').classList.remove('hidden');
-  renderApps();
-}
-function hidePanel(){
-  document.getElementById('panel').classList.add('hidden');
-}
-
-let appsRendered = false;
-function renderApps(){
-  if(appsRendered) return;
-  appsRendered = true;
-  const g = document.getElementById('appsGrid');
-  g.innerHTML = '';
-  KIDS_APPS.forEach(app => {
-    const item = document.createElement('div');
-    item.className = 'app-item';
-    item.innerHTML = `
-      <div class="app-icon" id="icon${app.id}">
-        <div class="app-icon-placeholder">🎮</div>
-      </div>
-      <div class="app-name">${app.name}</div>`;
-    item.addEventListener('click', () => {
-      window.open('https://apps.apple.com/app/id' + app.id, '_system');
-    });
-    g.appendChild(item);
-    loadAppIcon(app.id);
-  });
-}
-
-function loadAppIcon(numId){
-  const cb = 'itcb' + numId;
-  window[cb] = function(d){
-    if(d.results && d.results[0]){
-      const img = document.createElement('img');
-      img.src = d.results[0].artworkUrl60;
-      const wrapper = document.getElementById('icon' + numId);
-      if(wrapper){ wrapper.innerHTML = ''; wrapper.appendChild(img); }
-    }
-  };
-  const s = document.createElement('script');
-  s.src = 'https://itunes.apple.com/lookup?id=' + numId + '&callback=' + cb;
-  document.body.appendChild(s);
 }
 
 // ── INIT ───────────────────────────────────────────────────────────────────
